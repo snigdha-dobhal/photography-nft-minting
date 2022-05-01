@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Election Smart Contract</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    
+    <h1 id="heading" style="color:white;" style="text-align:center">Photos Minting Portal</h1>
+
+    
+    <div class="flex-container">
+
+        <div id="left" class="flex-child" style="flex-grow: 1.5">
+        
+          <img id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
+
+          <label for="name" class="col-lg-2 control-label">Account Address:</label>
+          <input id="sender" type="text">
+
+          <label for="name" class="col-lg-2 control-label">Photo to Mint:</label>
+          <input id="photo" type="text">
+
+          <button id="button">Mint NFT</button>
+        </div>
+
+        <div id="right" class="flex-child" style="flex-grow: 1">
+          <p id="message"></p>
+        </div>
+
+    </div>
+      
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+    <script>
+       if (typeof web3 !== 'undefined') {
+           web3 = new Web3(web3.currentProvider);
+       } else {
+           web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+       }
+
+       web3.eth.defaultAccount = web3.eth.accounts[2];
+
+       var PhotographyContract = web3.eth.contract([
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]);
+      var Photo=PhotographyContract.at('0x294738eeFbb587C6b68B51952160D96C3c54fDc8');
+      var owner = '0xe23eD79062D97A84308103090e0d843085d6aBF8';
+      var maxQuantity = Photo.getMaxQuantity();
+      var totalQuantity = Photo.getTotalQuantity();
+      $("#message").append('<b style="color:#ff0000">Maximum tokens to be minted:</b> '+maxQuantity+', <br /><b>Total tokens minted:</b> '+totalQuantity+', <br />');
+      var isMintToggled = Photo.getIsMintToggled();
+      if(isMintToggled == false){
+        Photo.toggleIsMintEnabled('{ from: ' + owner + ' }');
+      }
+       $("#button").click(function(){
+          Photography.approveUserToMint($("#sender").val(), '{ from: ' + owner + ' }');//.send({ from: owner_address });
+          Photography.mint($("#photo").val(),'{ from: ' + $("#sender").val() +' }');
+          const balance = Photography.balanceOf($("#sender").val());
+          $("#message").append('Successfully minted a token for photo:  '+$("#photo").val()+',<br />by account: '+$("#sender").val()+',<br />');
+          $("#message").append('<b style="color:#ff0000">Maximum tokens to be minted:</b> '+maxQuantity+', <br /><b>Total tokens minted:</b> '+totalQuantity+', <br />');
+        });
+    </script>
+
+</body>
+</html>

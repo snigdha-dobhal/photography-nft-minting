@@ -1,0 +1,25 @@
+{
+  "name": "photography-nft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "@truffle/hdwallet-provider": "^2.0.8",
+    "axios": "^0.27.2",
+    "config": "^3.3.7",
+    "dotenv": "^16.0.0",
+    "ethereumjs-testrpc": "^6.0.3",
+    "npm": "^8.8.0",
+    "solc": "^0.8.13",
+    "truffle": "^5.1.67",
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3": "^0.20.7"
+  }
+}
